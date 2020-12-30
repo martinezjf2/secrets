@@ -18,9 +18,11 @@ const encrypt = require("mongoose-encryption");
 /* you have to explicitly tell express to use the public files */
 /* with adding line above these comments. */
 
+require('dotenv').config()
 const app = express();
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
+
 
 mongoose.connect("mongodb://localhost:27017/userDB", {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
 
@@ -29,7 +31,7 @@ const userSchema = new mongoose.Schema ({
     password: String
 });
 
-const secret = "This is our little secret.";
+const secret = process.env.SECRET
 userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password'] });
 
 const User = new mongoose.model("User", userSchema);
